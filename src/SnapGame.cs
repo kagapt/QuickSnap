@@ -11,7 +11,12 @@ namespace CardGames
             Bitmap cards;
             cards = SwinGame.LoadBitmapNamed ("Cards", "Cards.png");
             SwinGame.BitmapSetCellDetails (cards, 167, 250, 13, 5, 53);      // set the cells in the bitmap to match the cards
-        }
+			SwinGame.LoadFontNamed ("GameFont", "Chunkfive.otf", 24);
+			SwinGame.LoadSoundEffectNamed("Error","error.wav");
+			SwinGame.LoadSoundEffectNamed("Slap","slap.wav");
+			SwinGame.LoadSoundEffectNamed("SwinGameStart","SwinGameStart.wav");
+		}	
+		
 
 		/// <summary>
 		/// Respond to the user input -- with requests affecting myGame
@@ -21,17 +26,17 @@ namespace CardGames
 		{
 			//Fetch the next batch of UI interaction
 			SwinGame.ProcessEvents();
-
+			
 			if (SwinGame.KeyTyped (KeyCode.vk_SPACE))
 			{
-				myGame.Start ();
+				myGame.Start ();				
 			}
 			
 			if (myGame.IsStarted)
 			{
 				if (SwinGame.KeyTyped (KeyCode.vk_LSHIFT) && SwinGame.KeyTyped (KeyCode.vk_RSHIFT))
 				{
-					//TODO: add sound effects
+					SwinGame.PlaySoundEffect("Error");					
 				}
 				else if (SwinGame.KeyTyped (KeyCode.vk_LSHIFT))
 				{
@@ -51,19 +56,20 @@ namespace CardGames
 		private static void DrawGame(Snap myGame)
 		{
 			SwinGame.DrawBitmap("cardsBoard.png", 0, 0);
+			
 
 			// Draw the top card
 			Card top = myGame.TopCard;
 			if (top != null)
 			{
-				SwinGame.DrawText ("Top Card is " + top.ToString (), Color.RoyalBlue, 0, 20);
-				SwinGame.DrawText ("Player 1 score: " + myGame.Score(0), Color.RoyalBlue, 0, 30);
-				SwinGame.DrawText ("Player 2 score: " + myGame.Score(1), Color.RoyalBlue, 0, 40);
+				//SwinGame.DrawText ("Top Card is " + top.ToString (), Color.White, "GameFont", 310, 420);
+				SwinGame.DrawText ("" + myGame.Score(0), Color.White, "GameFont", 73, 55);
+				SwinGame.DrawText ("" + myGame.Score(1), Color.White, "GameFont", 770, 55);
 				SwinGame.DrawCell (SwinGame.BitmapNamed ("Cards"), top.CardIndex, 521, 153);
 			}
 			else
 			{
-				SwinGame.DrawText ("No card played yet...", Color.RoyalBlue, 0, 20);
+				SwinGame.DrawText ("No card played yet...", Color.White, "GameFont", 310, 120);
 			}
 
 			// Draw the back of the cards... to represent the deck
@@ -81,6 +87,7 @@ namespace CardGames
 		{
 			myGame.Update(); // just ask the game to do this...
 		}
+				
 
         public static void Main()
         {
